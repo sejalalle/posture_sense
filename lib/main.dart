@@ -1,8 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/splash/splash_screen.dart';
-import 'theme/app_theme.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'firebase_options.dart';
+import 'providers/auth_provider.dart';
+
+import 'screens/splash/splash_screen.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const PostureSenseApp());
 }
 
@@ -11,13 +22,21 @@ class PostureSenseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-  theme: AppTheme.lightTheme,
-      title: 'PostureSense',
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
-
-      
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: "PostureSense",
+        theme: ThemeData(
+          colorSchemeSeed: Colors.blue,
+          useMaterial3: true,
+        ),
+        home: const SplashScreen(),
+      ),
     );
   }
 }

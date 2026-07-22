@@ -1,5 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import '../../core/constants/app_colors.dart';
+import '../../widgets/app_logo.dart';
 import '../onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,22 +12,61 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 3), () {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const OnboardingScreen(),
-        ),
-      );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeIn,
+      ),
+    );
 
-    });
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _controller.forward();
+
+    Timer(
+      const Duration(milliseconds: 2500),
+      () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const OnboardingScreen(),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -32,40 +74,53 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
 
-      body: Center(
+      body: Container(
 
-        child: Column(
+        decoration: const BoxDecoration(
 
-          mainAxisAlignment: MainAxisAlignment.center,
+          gradient: LinearGradient(
 
-          children: [
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
 
-            Icon(
-              Icons.self_improvement,
-              size: 120,
-            ),
+            colors: [
 
-            SizedBox(height:20),
+              Color(0xFFEFF6FF),
 
-            Text(
-              "PostureSense",
-              style: TextStyle(
-                fontSize:32,
-                fontWeight: FontWeight.bold,
+              Colors.white,
+
+            ],
+          ),
+        ),
+
+        child: Center(
+
+          child: FadeTransition(
+
+            opacity: _fadeAnimation,
+
+            child: ScaleTransition(
+
+              scale: _scaleAnimation,
+
+              child: const Column(
+
+                mainAxisAlignment: MainAxisAlignment.center,
+
+                children: [
+
+                  AppLogo(),
+
+                  SizedBox(height: 60),
+
+                  CircularProgressIndicator(
+                    color: AppColors.primary,
+                  ),
+
+                ],
               ),
             ),
-
-            SizedBox(height:10),
-
-            Text(
-              "Monitor • Analyze • Improve",
-            ),
-
-            SizedBox(height:40),
-
-            CircularProgressIndicator(),
-
-          ],
+          ),
         ),
       ),
     );

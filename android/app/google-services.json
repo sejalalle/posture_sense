@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "887427559532",
+    "project_id": "posturesense-4dfcb",
+    "storage_bucket": "posturesense-4dfcb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887427559532:android:97ba80c7e49823b9822849",
+        "android_client_info": {
+          "package_name": "com.example.posture_sense"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdlZ8qlAjGWtkZe1lb_fFs3uCDx-zYdeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
